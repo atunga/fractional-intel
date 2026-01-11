@@ -399,6 +399,62 @@ document.querySelectorAll('.problem-list li').forEach((item, index) => {
 });
 
 // ===================================
+// Contact Form Handler
+// ===================================
+function initContactForm() {
+    const form = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
+
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                name: form.name.value,
+                company: form.company.value,
+                email: form.email.value,
+                revenue: form.revenue.value,
+                message: form.message.value,
+                timestamp: new Date().toISOString()
+            };
+
+            console.log('Form submitted:', formData);
+
+            form.style.display = 'none';
+            formSuccess.style.display = 'block';
+
+            form.reset();
+        });
+    }
+}
+
+// ===================================
+// FAQ Accordion
+// ===================================
+function initFAQ() {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const faqItem = question.closest('.faq-item');
+            const isActive = faqItem.classList.contains('active');
+
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+            });
+
+            // Toggle current item
+            if (!isActive) {
+                faqItem.classList.add('active');
+                question.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+}
+
+// ===================================
 // Initialize on DOM Load
 // ===================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -410,6 +466,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize scroll animations
     initAnimations();
     initWaveAnimations();
+    initFAQ();
+    initContactForm();
 
     // Initial calls
     updateNavState();
