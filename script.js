@@ -409,21 +409,48 @@ function initContactForm() {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span>Sending...</span>';
+
             const formData = {
                 name: form.name.value,
                 company: form.company.value,
                 email: form.email.value,
                 revenue: form.revenue.value,
-                message: form.message.value,
-                timestamp: new Date().toISOString()
+                message: form.message.value
             };
 
-            console.log('Form submitted:', formData);
+            try {
+                const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+                const apiUrl = `${supabaseUrl}/functions/v1/contact-form`;
 
-            form.style.display = 'none';
-            formSuccess.style.display = 'block';
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+                    },
+                    body: JSON.stringify(formData)
+                });
 
-            form.reset();
+                if (response.ok) {
+                    form.style.display = 'none';
+                    formSuccess.style.display = 'block';
+                    form.reset();
+                } else {
+                    const errorData = await response.json();
+                    alert('Error submitting form: ' + (errorData.error || 'Please try again'));
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('Error submitting form. Please try again or contact us directly at ted@vendingintelligence.co');
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            }
         });
     }
 }
