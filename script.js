@@ -153,6 +153,18 @@ function initAnimations() {
         el.classList.add('fade-in');
         animationObserver.observe(el);
     });
+
+    // Why Trust Us section
+    document.querySelectorAll('.trust-stat-item').forEach((el, index) => {
+        el.classList.add('fade-in');
+        el.style.transitionDelay = `${index * 0.15}s`;
+        animationObserver.observe(el);
+    });
+
+    document.querySelectorAll('.trust-us-card').forEach(el => {
+        el.classList.add('fade-in');
+        animationObserver.observe(el);
+    });
 }
 
 // ===================================
