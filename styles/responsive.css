@@ -1,0 +1,135 @@
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: calc(72px + var(--space-2xl));
+    padding-bottom: var(--space-2xl);
+  }
+
+  .hero-visual {
+    display: none;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .story-teaser {
+    grid-template-columns: 1fr;
+  }
+
+  .story-teaser-visual {
+    display: none;
+  }
+
+  .credentials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .phase-card {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .also-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .case-studies-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-split {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-left {
+    padding: var(--space-2xl) var(--space-lg);
+  }
+
+  .contact-right {
+    padding: var(--space-2xl) var(--space-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .hero-headline {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .stat-card {
+    padding: var(--space-lg);
+  }
+
+  .credentials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-section {
+    padding: var(--space-3xl) 0;
+  }
+
+  .cta-headline {
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+  }
+
+  .pull-quote-text {
+    font-size: 1.15rem;
+  }
+
+  .contact-form {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --space-lg: 16px;
+    --space-xl: 24px;
+    --space-2xl: 32px;
+    --space-3xl: 48px;
+    --space-4xl: 64px;
+  }
+
+  .nav-inner {
+    padding: 0 var(--space-md);
+  }
+
+  .nav-logo-text {
+    font-size: 0.65rem;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .btn--lg {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+
+  .insights-featured {
+    padding: var(--space-xl);
+  }
+}

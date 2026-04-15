@@ -10,7 +10,7 @@ interface ContactFormData {
   name: string;
   company: string;
   email: string;
-  revenue?: string;
+  role_title?: string;
   message: string;
 }
 
@@ -31,7 +31,7 @@ Deno.serve(async (req: Request) => {
 
     const formData: ContactFormData = await req.json();
 
-    const { name, company, email, revenue, message } = formData;
+    const { name, company, email, role_title, message } = formData;
 
     if (!name || !company || !email || !message) {
       return new Response(
@@ -49,7 +49,7 @@ Deno.serve(async (req: Request) => {
         name,
         company,
         email,
-        revenue: revenue || null,
+        role_title: role_title || null,
         message,
         email_sent: false,
       })
@@ -79,14 +79,14 @@ Deno.serve(async (req: Request) => {
           },
           body: JSON.stringify({
             from: "FIC Contact Form <noreply@vendingintelligence.co>",
-            to: ["ted@vendingintelligence.co"],
-            subject: `New Contact Form Submission from ${company}`,
+            to: ["ted@tedhebert.net"],
+            subject: `New Contact: ${company} — ${name}`,
             html: `
               <h2>New Contact Form Submission</h2>
               <p><strong>Name:</strong> ${name}</p>
               <p><strong>Company:</strong> ${company}</p>
               <p><strong>Email:</strong> ${email}</p>
-              <p><strong>Annual Revenue:</strong> ${revenue || "Not provided"}</p>
+              <p><strong>Role/Title:</strong> ${role_title || "Not provided"}</p>
               <p><strong>Message:</strong></p>
               <p>${message.replace(/\n/g, "<br>")}</p>
               <hr>

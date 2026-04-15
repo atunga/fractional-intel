@@ -1,0 +1,125 @@
+@keyframes sunPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes waveFloat {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+}
+
+@keyframes waveDots {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-6px); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-on-scroll.delay-1 { transition-delay: 0.1s; }
+.animate-on-scroll.delay-2 { transition-delay: 0.2s; }
+.animate-on-scroll.delay-3 { transition-delay: 0.3s; }
+.animate-on-scroll.delay-4 { transition-delay: 0.4s; }
+
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.stagger-children.visible > *:nth-child(1) { transition-delay: 0.05s; }
+.stagger-children.visible > *:nth-child(2) { transition-delay: 0.1s; }
+.stagger-children.visible > *:nth-child(3) { transition-delay: 0.15s; }
+.stagger-children.visible > *:nth-child(4) { transition-delay: 0.2s; }
+.stagger-children.visible > *:nth-child(5) { transition-delay: 0.25s; }
+.stagger-children.visible > *:nth-child(6) { transition-delay: 0.3s; }
+
+.stagger-children.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tag-animate .tag-stripes span {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.tag-animate.visible .tag-stripes span {
+  transform: scaleX(1);
+}
+
+.tag-animate.visible .tag-stripes span:nth-child(1) { transition-delay: 0s; }
+.tag-animate.visible .tag-stripes span:nth-child(2) { transition-delay: 0.08s; }
+.tag-animate.visible .tag-stripes span:nth-child(3) { transition-delay: 0.16s; }
+
+.tag-animate .tag-label {
+  opacity: 0;
+  transition: opacity 0.3s ease 0.3s;
+}
+
+.tag-animate.visible .tag-label {
+  opacity: 1;
+}
+
+.hero-animate .hero-content > * {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+body.loaded .hero-animate .hero-content > * {
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+body.loaded .hero-animate .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+body.loaded .hero-animate .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+body.loaded .hero-animate .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+body.loaded .hero-animate .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+
+body.loaded .hero-animate .hero-visual {
+  animation: fadeIn 1s ease 0.5s forwards;
+  opacity: 0;
+}
+
+.btn-press {
+  transition: transform 0.1s ease;
+}
+
+.btn-press:active {
+  transform: scale(0.97);
+}
