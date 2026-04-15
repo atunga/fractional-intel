@@ -15,7 +15,7 @@ export function renderContact() {
         </div>
         <h1 class="contact-left-headline">Find Your Lever.</h1>
         <p class="contact-left-sub">20 minutes. No pitch. Just a look under the hood to see if there's a hidden leverage point in your operation.</p>
-        <p class="contact-left-email"><a href="mailto:ted@tedhebert.net">ted@tedhebert.net</a></p>
+        <p class="contact-left-email"><a href="mailto:ted@raizorcrest.ai">ted@raizorcrest.ai</a></p>
         <p class="contact-left-linkedin"><a href="#">LinkedIn</a></p>
         <p class="contact-left-spirit">It's OK to be AWESOME!</p>
         <div class="contact-left-lever" aria-hidden="true">
@@ -115,7 +115,7 @@ export function initContactForm() {
       form.style.display = 'none';
       successEl.style.display = 'block';
     } catch {
-      errorEl.textContent = 'Something went wrong. Please email ted@tedhebert.net directly.';
+      errorEl.textContent = 'Something went wrong. Please email ted@raizorcrest.ai directly.';
       errorEl.style.display = 'block';
       submitBtn.disabled = false;
       submitBtn.textContent = "Let's Find It \u2192";
