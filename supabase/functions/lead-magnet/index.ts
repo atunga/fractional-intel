@@ -6,15 +6,14 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
-const PDF_BUCKET = "lead-magnet";
-const PDF_FILE_PATH = "Find_the_Lever_-_Digital_Edition.pdf";
-const SIGNED_URL_EXPIRES_IN = 120;
+const PDF_FILENAME = "Find_the_Lever_-_Digital_Edition.pdf";
 
 interface LeadMagnetFormData {
   name: string;
   company: string;
   title: string;
   email: string;
+  siteUrl?: string;
 }
 
 Deno.serve(async (req: Request) => {
@@ -33,15 +32,12 @@ Deno.serve(async (req: Request) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const formData: LeadMagnetFormData = await req.json();
-    const { name, company, title, email } = formData;
+    const { name, company, title, email, siteUrl } = formData;
 
     if (!name || !company || !title || !email) {
       return new Response(
         JSON.stringify({ error: "All fields are required: name, company, title, and email." }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -49,10 +45,7 @@ Deno.serve(async (req: Request) => {
     if (!emailRegex.test(email)) {
       return new Response(
         JSON.stringify({ error: "Please provide a valid email address." }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -72,30 +65,12 @@ Deno.serve(async (req: Request) => {
       console.error("Database error:", dbError);
       return new Response(
         JSON.stringify({ error: "Failed to save your information. Please try again." }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const { data: signedUrlData, error: storageError } = await supabase
-      .storage
-      .from(PDF_BUCKET)
-      .createSignedUrl(PDF_FILE_PATH, SIGNED_URL_EXPIRES_IN, {
-        download: true,
-      });
-
-    if (storageError || !signedUrlData?.signedUrl) {
-      console.error("Storage error:", storageError);
-      return new Response(
-        JSON.stringify({ error: "Failed to generate download link. Please contact ted@raizorcrest.ai." }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
-    }
+    const origin = siteUrl || req.headers.get("origin") || req.headers.get("referer")?.replace(/\/$/, "") || "";
+    const downloadUrl = `${origin}/${PDF_FILENAME}`;
 
     await supabase
       .from("lead_magnet_submissions")
@@ -129,14 +104,10 @@ Deno.serve(async (req: Request) => {
         if (emailResponse.ok) {
           await supabase
             .from("lead_magnet_submissions")
-            .update({
-              email_sent: true,
-              email_sent_at: new Date().toISOString(),
-            })
+            .update({ email_sent: true, email_sent_at: new Date().toISOString() })
             .eq("id", submission.id);
         } else {
-          const errorText = await emailResponse.text();
-          console.error("Email sending failed:", errorText);
+          console.error("Email sending failed:", await emailResponse.text());
         }
       } catch (emailError) {
         console.error("Error sending notification email:", emailError);
@@ -144,23 +115,14 @@ Deno.serve(async (req: Request) => {
     }
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        downloadUrl: signedUrlData.signedUrl,
-      }),
-      {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      JSON.stringify({ success: true, downloadUrl }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
     console.error("Error processing lead magnet form:", error);
     return new Response(
       JSON.stringify({ error: "Internal server error. Please contact ted@raizorcrest.ai." }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });

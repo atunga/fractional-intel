@@ -112,6 +112,7 @@ export function initDownloadForm() {
       company: form.company.value.trim(),
       title: form.title.value.trim(),
       email: form.email.value.trim(),
+      siteUrl: `${window.location.protocol}//${window.location.host}`,
     };
 
     if (!data.name || !data.company || !data.title || !data.email) {
