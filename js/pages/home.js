@@ -151,6 +151,24 @@ export function renderHome() {
       </div>
     </section>
 
+    <section class="page-section page-section--sand" aria-labelledby="lead-magnet-heading">
+      <div class="container">
+        <div class="lead-magnet-banner animate-on-scroll">
+          <div class="lead-magnet-banner-text">
+            <div class="section-tag tag-animate">
+              <div class="tag-stripes tag-stripes--teal">
+                <span></span><span></span><span></span>
+              </div>
+              <span class="tag-label" style="color: var(--color-navy-light)">FREE RESOURCE</span>
+            </div>
+            <h2 id="lead-magnet-heading" class="lead-magnet-banner-headline">Find the Lever — Digital Edition</h2>
+            <p class="lead-magnet-banner-sub">The exact framework I use to find hidden leverage points in industrial operations. Download the guide free.</p>
+          </div>
+          <a href="/download" class="btn btn--coral btn-press lead-magnet-banner-btn" data-link>Get the Free Guide &rarr;</a>
+        </div>
+      </div>
+    </section>
+
     <div class="wave-divider" aria-hidden="true">
       <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
         <path d="M0,50 C360,0 720,70 1080,20 C1260,5 1380,30 1440,20 L1440,80 L0,80 Z" fill="var(--color-navy-deep)"/>

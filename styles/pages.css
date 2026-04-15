@@ -722,6 +722,149 @@
   margin-bottom: var(--space-sm);
 }
 
+.download-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 72px);
+  margin-top: 72px;
+}
+
+.download-left {
+  background: var(--color-navy-deep);
+  color: var(--color-cream);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-3xl);
+}
+
+.download-left-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--color-cream);
+  margin-bottom: var(--space-xs);
+  line-height: 1.1;
+}
+
+.download-left-edition {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-coral);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-xl);
+}
+
+.download-left-sub {
+  font-size: 1rem;
+  color: var(--color-sand);
+  line-height: 1.7;
+  margin-bottom: var(--space-2xl);
+  max-width: 420px;
+}
+
+.download-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-2xl);
+}
+
+.download-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  font-size: 0.95rem;
+  color: var(--color-cream);
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.download-feature-dot {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background: var(--color-teal);
+  margin-top: 7px;
+}
+
+.download-left-lever {
+  opacity: 0.25;
+  margin-top: auto;
+}
+
+.download-right {
+  background: var(--color-cream);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-3xl);
+}
+
+.download-form {
+  max-width: 440px;
+}
+
+.download-form-intro {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-navy);
+  margin-bottom: var(--space-xl);
+}
+
+.form-required {
+  color: var(--color-coral);
+  font-size: 0.85em;
+}
+
+.download-submit-btn {
+  width: 100%;
+  margin-top: var(--space-sm);
+}
+
+.download-privacy-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-navy-light);
+  text-align: center;
+  margin-top: var(--space-md);
+  opacity: 0.7;
+}
+
+.download-success {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 440px;
+  gap: var(--space-md);
+}
+
+.download-success-icon {
+  margin-bottom: var(--space-sm);
+}
+
+.download-success-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--color-teal);
+}
+
+.download-success-text {
+  font-size: 0.95rem;
+  color: var(--color-navy-light);
+  line-height: 1.6;
+}
+
+.download-success-sub {
+  font-size: 0.95rem;
+  color: var(--color-navy);
+  line-height: 1.6;
+  margin-top: var(--space-sm);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-sand);
+}
+
 .contact-split {
   display: grid;
   grid-template-columns: 1fr 1fr;

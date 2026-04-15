@@ -54,6 +54,18 @@
   .contact-right {
     padding: var(--space-2xl) var(--space-lg);
   }
+
+  .download-split {
+    grid-template-columns: 1fr;
+  }
+
+  .download-left {
+    padding: var(--space-2xl) var(--space-lg);
+  }
+
+  .download-right {
+    padding: var(--space-2xl) var(--space-lg);
+  }
 }
 
 @media (max-width: 768px) {
@@ -99,6 +111,10 @@
   }
 
   .contact-form {
+    max-width: 100%;
+  }
+
+  .download-form {
     max-width: 100%;
   }
 }

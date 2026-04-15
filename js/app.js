@@ -4,6 +4,7 @@ import { renderServices } from './pages/services.js';
 import { renderCaseStudies } from './pages/caseStudies.js';
 import { renderInsights } from './pages/insights.js';
 import { renderContact, initContactForm } from './pages/contact.js';
+import { renderDownload, initDownloadForm } from './pages/download.js';
 
 const routes = {
   '/': renderHome,
@@ -12,6 +13,7 @@ const routes = {
   '/case-studies': renderCaseStudies,
   '/insights': renderInsights,
   '/contact': renderContact,
+  '/download': renderDownload,
 };
 
 const mainEl = document.getElementById('main-content');
@@ -33,6 +35,7 @@ function navigate(path) {
     initAnimations();
     initScrollIndicator();
     if (path === '/contact') initContactForm();
+    if (path === '/download') initDownloadForm();
   });
 }
 

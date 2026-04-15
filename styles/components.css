@@ -217,3 +217,53 @@
   font-size: 0.8rem;
   color: var(--color-teal);
 }
+
+.lead-magnet-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xl);
+  background: var(--color-cream);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl) var(--space-3xl);
+  border-left: 5px solid var(--color-teal);
+  box-shadow: var(--shadow-md);
+}
+
+.lead-magnet-banner-text {
+  flex: 1;
+}
+
+.lead-magnet-banner-headline {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+  color: var(--color-navy);
+  margin-bottom: var(--space-sm);
+  line-height: 1.3;
+}
+
+.lead-magnet-banner-sub {
+  font-size: 0.95rem;
+  color: var(--color-navy-light);
+  line-height: 1.6;
+  max-width: 560px;
+}
+
+.lead-magnet-banner-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .lead-magnet-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-xl);
+  }
+
+  .lead-magnet-banner-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
