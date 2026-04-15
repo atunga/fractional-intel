@@ -144,20 +144,23 @@ export function initDownloadForm() {
 
       const result = await response.json();
 
-      if (!response.ok || !result.downloadUrl) {
+      if (!response.ok) {
         throw new Error(result.error || 'Download failed');
       }
+
+      const pdfUrl = '/Find_the_Lever_-_Digital_Edition.pdf';
 
       form.style.display = 'none';
       successEl.style.display = 'flex';
 
       const fallbackLink = document.getElementById('download-fallback-link');
       if (fallbackLink) {
-        fallbackLink.href = result.downloadUrl;
+        fallbackLink.href = pdfUrl;
+        fallbackLink.setAttribute('download', 'Find_the_Lever_-_Digital_Edition.pdf');
       }
 
       const anchor = document.createElement('a');
-      anchor.href = result.downloadUrl;
+      anchor.href = pdfUrl;
       anchor.download = 'Find_the_Lever_-_Digital_Edition.pdf';
       document.body.appendChild(anchor);
       anchor.click();

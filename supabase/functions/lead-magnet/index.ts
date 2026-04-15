@@ -6,14 +6,11 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
-const PDF_FILENAME = "Find_the_Lever_-_Digital_Edition.pdf";
-
 interface LeadMagnetFormData {
   name: string;
   company: string;
   title: string;
   email: string;
-  siteUrl?: string;
 }
 
 Deno.serve(async (req: Request) => {
@@ -32,7 +29,7 @@ Deno.serve(async (req: Request) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const formData: LeadMagnetFormData = await req.json();
-    const { name, company, title, email, siteUrl } = formData;
+    const { name, company, title, email } = formData;
 
     if (!name || !company || !title || !email) {
       return new Response(
@@ -68,9 +65,6 @@ Deno.serve(async (req: Request) => {
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-
-    const origin = siteUrl || req.headers.get("origin") || req.headers.get("referer")?.replace(/\/$/, "") || "";
-    const downloadUrl = `${origin}/${PDF_FILENAME}`;
 
     await supabase
       .from("lead_magnet_submissions")
@@ -115,7 +109,7 @@ Deno.serve(async (req: Request) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true, downloadUrl }),
+      JSON.stringify({ success: true }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
