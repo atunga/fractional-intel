@@ -627,16 +627,17 @@ function loadTools(container) {
     try {
       const file = fileInput.files[0];
 
-      const base64 = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result.split(',')[1]);
-        reader.onerror = () => reject(new Error('Failed to read file'));
-        reader.readAsDataURL(file);
-      });
+      const token = getToken();
+      const formData = new FormData();
+      formData.append('file', file, file.name);
 
-      const res = await adminFetch('upload-pdf', {
+      const res = await fetch(`${ADMIN_API}/upload-pdf`, {
         method: 'POST',
-        body: JSON.stringify({ base64pdf: base64, originalFilename: file.name }),
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'x-admin-token': token || '',
+        },
+        body: formData,
       });
       const json = await res.json();
       msg.style.display = 'block';

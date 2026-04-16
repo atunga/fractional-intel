@@ -155,22 +155,20 @@ Deno.serve(async (req: Request) => {
 
     if (path === "upload-pdf") {
       if (req.method !== "POST") return jsonResponse({ error: "Method not allowed" }, 405);
-      const { base64pdf, originalFilename } = await req.json();
-      if (!base64pdf) return jsonResponse({ error: "Missing base64pdf" }, 400);
 
-      const filename = originalFilename || "lead-magnet.pdf";
+      const formData = await req.formData();
+      const file = formData.get("file") as File | null;
+      if (!file) return jsonResponse({ error: "Missing file" }, 400);
+
+      const filename = file.name || "lead-magnet.pdf";
       const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
       const filePath = `uploads/${Date.now()}_${safeName}`;
 
-      const binaryString = atob(base64pdf);
-      const bytes = new Uint8Array(binaryString.length);
-      for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
+      const bytes = new Uint8Array(await file.arrayBuffer());
 
       const { error: uploadError } = await supabase.storage
         .from("lead-magnet")
-        .upload(filePath, bytes.buffer, { contentType: "application/pdf", upsert: false });
+        .upload(filePath, bytes, { contentType: "application/pdf", upsert: false });
       if (uploadError) return jsonResponse({ error: `Upload failed: ${uploadError.message}` }, 500);
 
       const { error: dbError } = await supabase
