@@ -157,15 +157,11 @@ export function initDownloadForm() {
       const fallbackLink = document.getElementById('download-fallback-link');
       if (fallbackLink) {
         fallbackLink.href = pdfUrl;
-        fallbackLink.setAttribute('download', pdfFilename);
+        fallbackLink.target = '_blank';
+        fallbackLink.rel = 'noopener noreferrer';
       }
 
-      const anchor = document.createElement('a');
-      anchor.href = pdfUrl;
-      anchor.download = pdfFilename;
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
+      window.open(pdfUrl, '_blank', 'noopener,noreferrer');
 
     } catch (err) {
       const msg = err.message && err.message.length < 200
