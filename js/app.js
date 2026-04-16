@@ -5,6 +5,7 @@ import { renderCaseStudies } from './pages/caseStudies.js';
 import { renderInsights } from './pages/insights.js';
 import { renderContact, initContactForm } from './pages/contact.js';
 import { renderDownload, initDownloadForm } from './pages/download.js';
+import { renderAdmin, initAdmin } from './pages/admin.js';
 
 const routes = {
   '/': renderHome,
@@ -14,6 +15,7 @@ const routes = {
   '/insights': renderInsights,
   '/contact': renderContact,
   '/download': renderDownload,
+  '/admin': renderAdmin,
 };
 
 const mainEl = document.getElementById('main-content');
@@ -36,6 +38,7 @@ function navigate(path) {
     initScrollIndicator();
     if (path === '/contact') initContactForm();
     if (path === '/download') initDownloadForm();
+    if (path === '/admin') initAdmin();
   });
 }
 
