@@ -626,34 +626,36 @@ function loadTools(container) {
 
     try {
       const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const base64 = e.target.result.split(',')[1];
-        const res = await adminFetch('upload-pdf', {
-          method: 'POST',
-          body: JSON.stringify({ base64pdf: base64, originalFilename: file.name }),
-        });
-        const json = await res.json();
-        msg.style.display = 'block';
-        if (res.ok) {
-          msg.className = 'form-success';
-          msg.textContent = 'PDF uploaded successfully.';
-          fileInput.value = '';
-        } else {
-          msg.className = 'form-error';
-          msg.textContent = json.error || 'Upload failed.';
-        }
-        btn.textContent = 'Upload PDF';
-        btn.disabled = false;
-      };
-      reader.readAsDataURL(file);
-    } catch {
+
+      const base64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
+      });
+
+      const res = await adminFetch('upload-pdf', {
+        method: 'POST',
+        body: JSON.stringify({ base64pdf: base64, originalFilename: file.name }),
+      });
+      const json = await res.json();
+      msg.style.display = 'block';
+      if (res.ok) {
+        msg.className = 'form-success';
+        msg.textContent = 'PDF uploaded successfully.';
+        fileInput.value = '';
+      } else {
+        msg.className = 'form-error';
+        msg.textContent = json.error || 'Upload failed.';
+      }
+    } catch (err) {
       msg.style.display = 'block';
       msg.className = 'form-error';
-      msg.textContent = 'Connection error.';
-      btn.textContent = 'Upload PDF';
-      btn.disabled = false;
+      msg.textContent = err.message || 'Connection error.';
     }
+
+    btn.textContent = 'Upload PDF';
+    btn.disabled = false;
   });
 
   document.getElementById('change-password-btn')?.addEventListener('click', async () => {
