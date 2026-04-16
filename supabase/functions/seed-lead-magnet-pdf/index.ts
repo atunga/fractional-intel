@@ -2,7 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
@@ -16,30 +16,34 @@ Deno.serve(async (req: Request) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { base64pdf, originalFilename } = await req.json();
-    if (!base64pdf) {
+    const body = await req.json().catch(() => ({}));
+    const { siteUrl } = body;
+    if (!siteUrl) {
       return new Response(
-        JSON.stringify({ error: "Missing base64pdf in request body" }),
+        JSON.stringify({ error: "Missing siteUrl in request body" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const filename = originalFilename || "lead-magnet.pdf";
-    const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const filePath = `uploads/${Date.now()}_${safeName}`;
-
-    const binaryString = atob(base64pdf);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
+    const pdfUrl = `${siteUrl}/Find_the_Lever_-_Digital_Edition.pdf`;
+    const pdfResponse = await fetch(pdfUrl);
+    if (!pdfResponse.ok) {
+      return new Response(
+        JSON.stringify({ error: `Could not fetch PDF from ${pdfUrl}: ${pdfResponse.status}` }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
+
+    const pdfBytes = new Uint8Array(await pdfResponse.arrayBuffer());
+    const filename = "Find_the_Lever_-_Digital_Edition.pdf";
+    const filePath = `uploads/seed_${filename}`;
 
     const { error: uploadError } = await supabase
       .storage
       .from("lead-magnet")
-      .upload(filePath, bytes.buffer, {
+      .upload(filePath, pdfBytes, {
         contentType: "application/pdf",
-        upsert: false,
+        upsert: true,
       });
 
     if (uploadError) {
@@ -51,26 +55,17 @@ Deno.serve(async (req: Request) => {
 
     const { error: dbError } = await supabase
       .from("lead_magnets")
-      .insert({
-        file_path: filePath,
-        original_filename: filename,
-      });
+      .insert({ file_path: filePath, original_filename: filename });
 
     if (dbError) {
-      console.error("DB insert error:", dbError);
       return new Response(
-        JSON.stringify({ error: `File uploaded but failed to save record: ${dbError.message}` }),
+        JSON.stringify({ error: `DB insert failed: ${dbError.message}` }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        message: "PDF uploaded successfully.",
-        filePath,
-        originalFilename: filename,
-      }),
+      JSON.stringify({ success: true, filePath }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {

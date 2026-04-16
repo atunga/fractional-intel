@@ -15,10 +15,7 @@ interface LeadMagnetFormData {
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, {
-      status: 200,
-      headers: corsHeaders,
-    });
+    return new Response(null, { status: 200, headers: corsHeaders });
   }
 
   try {
@@ -43,6 +40,32 @@ Deno.serve(async (req: Request) => {
       return new Response(
         JSON.stringify({ error: "Please provide a valid email address." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { data: latestPdf, error: pdfError } = await supabase
+      .from("lead_magnets")
+      .select("file_path, original_filename")
+      .order("uploaded_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (pdfError || !latestPdf) {
+      return new Response(
+        JSON.stringify({ error: "No PDF is currently available for download. Please check back soon." }),
+        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { data: signedUrlData, error: signedUrlError } = await supabase
+      .storage
+      .from("lead-magnet")
+      .createSignedUrl(latestPdf.file_path, 300);
+
+    if (signedUrlError || !signedUrlData?.signedUrl) {
+      return new Response(
+        JSON.stringify({ error: "Failed to generate download link. Please try again." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -109,7 +132,11 @@ Deno.serve(async (req: Request) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true }),
+      JSON.stringify({
+        success: true,
+        downloadUrl: signedUrlData.signedUrl,
+        filename: latestPdf.original_filename,
+      }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
